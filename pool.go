@@ -12,9 +12,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/hamed-yousefi/gowl/status/pool"
-	"github.com/hamed-yousefi/gowl/status/process"
-	"github.com/hamed-yousefi/gowl/status/worker"
+	"github.com/555f/gowl/status/pool"
+	"github.com/555f/gowl/status/process"
+	"github.com/555f/gowl/status/worker"
 )
 
 const (
@@ -43,7 +43,7 @@ type (
 	// Pool is a mechanism to dispatch processes between a group of workers.
 	Pool interface {
 		// Start runs the pool.
-		Start() error
+		Start(ctx context.Context) error
 		// Register adds the process to the pool queue.
 		Register(p ...Process)
 		// Close stops a running pool.
@@ -90,6 +90,7 @@ type (
 
 	// workerPool is an implementation of Pool and Monitor interfaces.
 	workerPool struct {
+		ctx          context.Context
 		status       pool.Status
 		size         int
 		queue        chan Process
@@ -122,7 +123,9 @@ func NewPool(size int) Pool {
 // Start runs the pool. It returns error if pool is already in running state.
 // It changes the pool state to Running and calls workerPool.run() function to
 // run the pool.
-func (w *workerPool) Start() error {
+func (w *workerPool) Start(ctx context.Context) error {
+	w.ctx = ctx
+
 	if w.status == pool.Running {
 		return errors.New("unable to start the pool, status: " + w.status.String())
 	}
@@ -200,7 +203,7 @@ func (w *workerPool) run() {
 func (w *workerPool) Register(args ...Process) {
 	// Create control panel for each process and make process stat for each of them.
 	for _, p := range args {
-		ctx, cancel := context.WithCancel(context.Background())
+		ctx, cancel := context.WithCancel(w.ctx)
 		w.controlPanel.put(p.PID(), &processContext{
 			ctx:    ctx,
 			cancel: cancel,

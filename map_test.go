@@ -11,7 +11,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/hamed-yousefi/gowl/status/worker"
+	"github.com/555f/gowl/status/worker"
 )
 
 // Test controlPanelMap put and get functions

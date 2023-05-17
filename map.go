@@ -8,7 +8,7 @@ import (
 	"context"
 	"sync"
 
-	"github.com/hamed-yousefi/gowl/status/worker"
+	"github.com/555f/gowl/status/worker"
 )
 
 type (

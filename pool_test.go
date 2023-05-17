@@ -14,8 +14,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/hamed-yousefi/gowl/status/pool"
-	"github.com/hamed-yousefi/gowl/status/process"
+	"github.com/555f/gowl/status/pool"
+	"github.com/555f/gowl/status/process"
 )
 
 type (

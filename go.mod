@@ -1,4 +1,4 @@
-module github.com/hamed-yousefi/gowl
+module github.com/555f/gowl
 
 go 1.17
 
